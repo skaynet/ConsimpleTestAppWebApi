@@ -1,0 +1,47 @@
+CREATE DATABASE ConsimpleTestDB;
+GO
+
+USE ConsimpleTestDB;
+
+CREATE TABLE Customer
+(
+	Id INT CONSTRAINT PK_Customer_Id PRIMARY KEY IDENTITY,
+	FullName NVARCHAR(128) CONSTRAINT UQ_Customer_FullName UNIQUE NOT NULL,
+	DateBirth DATE NOT NULL,
+	DateRegistration DATE NOT NULL
+);
+
+CREATE TABLE Ñategory
+(
+	Id INT CONSTRAINT PK_Ñategory_Id PRIMARY KEY IDENTITY,
+	Name NVARCHAR(128) NOT NULL
+);
+
+CREATE TABLE Products
+(
+	Id INT CONSTRAINT PK_Products_Id PRIMARY KEY IDENTITY,
+	Name NVARCHAR(256) NOT NULL,
+	ÑategoryId INT NOT NULL,
+	Article NVARCHAR(128) NOT NULL,
+	Price FLOAT NOT NULL,
+	CONSTRAINT FK_Products_To_Ñategory FOREIGN KEY (ÑategoryId) REFERENCES Ñategory (Id)
+);
+
+CREATE TABLE Purchases
+(
+	Id INT CONSTRAINT PK_Purchases_Id PRIMARY KEY IDENTITY,
+	Date DATE NOT NULL,
+	TotalCost FLOAT NOT NULL,
+	CustomerId INT NOT NULL,
+	CONSTRAINT FK_Purchases_To_Customer FOREIGN KEY (CustomerId) REFERENCES Customer (Id)
+);
+
+CREATE TABLE PurchaseProducts
+(
+	Id INT CONSTRAINT PK_PurchaseProducts_Id PRIMARY KEY IDENTITY,
+	PurchaseId INT NOT NULL,
+	ProductId INT NOT NULL,
+	Amount INT NOT NULL,
+	CONSTRAINT FK_PurchaseProducts_To_Purchases FOREIGN KEY (PurchaseId) REFERENCES Purchases (Id),
+	CONSTRAINT FK_PurchaseProducts_To_Products FOREIGN KEY (ProductId) REFERENCES Products (Id)
+);
